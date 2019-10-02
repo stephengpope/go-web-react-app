@@ -20,3 +20,33 @@ COPY --from=node_builder /build ./web
 RUN chmod +x ./main
 EXPOSE 8080
 CMD ./main
+
+-----
+
+FROM heroku/heroku:18-build as build
+
+COPY . /app
+WORKDIR /app/server
+
+# Setup buildpack
+RUN mkdir -p /tmp/buildpack/heroku/go /tmp/build_cache /tmp/env
+RUN curl https://codon-buildpacks.s3.amazonaws.com/buildpacks/heroku/go.tgz | tar xz -C /tmp/buildpack/heroku/go
+
+#Execute Buildpack
+RUN STACK=heroku-18 /tmp/buildpack/heroku/go/bin/compile /app/server /tmp/build_cache /tmp/env
+
+# Build the React application
+FROM FROM heroku/heroku:18 AS node_builder
+COPY --from=builder /app/client ./
+RUN npm install
+RUN npm run build
+
+# Prepare final, minimal image
+FROM heroku/heroku:18
+
+COPY --from=build /app/server /app
+COPY --from=node_builder /build /app/web
+ENV HOME /app
+WORKDIR /app
+RUN useradd -m heroku
+USER heroku

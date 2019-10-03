@@ -4,4 +4,4 @@ build:
     - go
 
 run:
-  web: main
+  web: go-web-react-app

@@ -1,1 +1,1 @@
-web: bin/webapp
+web: bin/go-web-react-app

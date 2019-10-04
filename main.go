@@ -3,9 +3,18 @@ package main
 import (
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
+	"os"
+  "fmt"
+  "log"
 )
 
 func main() {
+
+	dir, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(dir)
 
 	r := gin.Default()
 	// Dont worry about this line just yet, it will make sense in the Dockerise bit!

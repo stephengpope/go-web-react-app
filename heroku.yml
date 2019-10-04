@@ -3,4 +3,4 @@ build:
   docker:
     web: Dockerfile
     worker:
-       dockerfile: Dockerfilef
+       dockerfile: Dockerfile

@@ -1,7 +1,6 @@
 
 build:
-  languages:
-    - go
-
-run:
-  web: go-web-react-app
+  docker:
+    web: Dockerfile
+    worker:
+       dockerfile: Dockerfile
